@@ -49,9 +49,8 @@ target_include_directories(agilispiezo PUBLIC
 target_link_libraries(agilispiezo PUBLIC Threads::Threads)
 target_compile_options(agilispiezo PRIVATE -Wall -Wextra -pedantic)
 
-# Create example application
-add_executable(example src/main.cpp)
-target_link_libraries(example PRIVATE agilispiezo)
+# Add examples directory
+add_subdirectory(examples)
 
 # Installation rules
 install(TARGETS agilispiezo
@@ -96,6 +95,7 @@ install(FILES
 # Directory structure setup
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src)
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/libagilispiezo)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/examples)
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # Create a configuration template if it doesn't exist
