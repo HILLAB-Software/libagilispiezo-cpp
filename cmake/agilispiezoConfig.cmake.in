@@ -1,0 +1,4 @@
+@PACKAGE_INIT@
+
+include("${CMAKE_CURRENT_LIST_DIR}/agilispiezoTargets.cmake")
+check_required_components(agilispiezo)
