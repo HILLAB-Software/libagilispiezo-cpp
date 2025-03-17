@@ -1,8 +1,0 @@
-/usr/local/lib/libagilispiezo.a
-/usr/local/lib/cmake/agilispiezo/agilispiezoTargets.cmake
-/usr/local/lib/cmake/agilispiezo/agilispiezoTargets-noconfig.cmake
-/usr/local/lib/cmake/agilispiezo/agilispiezoConfig.cmake
-/usr/local/lib/cmake/agilispiezo/agilispiezoConfigVersion.cmake
-/usr/local/bin/examples/basic_example
-/usr/local/share/agilispiezo/examples/basic_example.cpp
-/usr/local/share/agilispiezo/examples/README.md

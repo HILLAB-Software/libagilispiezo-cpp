@@ -1,2 +1,0 @@
-/usr/bin/ar qc libagilispiezo.a  CMakeFiles/agilispiezo.dir/src/agilispiezo.cpp.o CMakeFiles/agilispiezo.dir/src/serial.cpp.o
-/usr/bin/ranlib libagilispiezo.a
