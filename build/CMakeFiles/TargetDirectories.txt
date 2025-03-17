@@ -1,0 +1,14 @@
+/home/dev/libagilispiezo-cpp/build/CMakeFiles/install/strip.dir
+/home/dev/libagilispiezo-cpp/build/CMakeFiles/install/local.dir
+/home/dev/libagilispiezo-cpp/build/CMakeFiles/install.dir
+/home/dev/libagilispiezo-cpp/build/CMakeFiles/list_install_components.dir
+/home/dev/libagilispiezo-cpp/build/CMakeFiles/rebuild_cache.dir
+/home/dev/libagilispiezo-cpp/build/CMakeFiles/edit_cache.dir
+/home/dev/libagilispiezo-cpp/build/CMakeFiles/agilispiezo.dir
+/home/dev/libagilispiezo-cpp/build/examples/CMakeFiles/install/strip.dir
+/home/dev/libagilispiezo-cpp/build/examples/CMakeFiles/install/local.dir
+/home/dev/libagilispiezo-cpp/build/examples/CMakeFiles/install.dir
+/home/dev/libagilispiezo-cpp/build/examples/CMakeFiles/list_install_components.dir
+/home/dev/libagilispiezo-cpp/build/examples/CMakeFiles/rebuild_cache.dir
+/home/dev/libagilispiezo-cpp/build/examples/CMakeFiles/edit_cache.dir
+/home/dev/libagilispiezo-cpp/build/examples/CMakeFiles/basic_example.dir

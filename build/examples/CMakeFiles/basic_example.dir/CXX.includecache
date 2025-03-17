@@ -1,0 +1,42 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/agilispiezo.h
+thread
+-
+queue
+-
+functional
+-
+mutex
+-
+future
+-
+iostream
+-
+serial.h
+../include/serial.h
+
+../include/serial.h
+asio.hpp
+-
+string
+-
+functional
+-
+
+/home/dev/libagilispiezo-cpp/examples/basic_example.cpp
+agilispiezo.h
+/home/dev/libagilispiezo-cpp/examples/agilispiezo.h
+iostream
+-
+thread
+-
+chrono
+-
+

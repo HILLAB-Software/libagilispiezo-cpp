@@ -17,7 +17,7 @@
  */
 
 
-#include "libagilispiezo/agilispiezo.h"
+#include "agilispiezo.h"
 #include <chrono>
 #include <iostream>
 #include <sstream>

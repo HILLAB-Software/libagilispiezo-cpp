@@ -14,8 +14,8 @@ set(SOURCES
 
 # Define header files
 set(HEADERS
-    include/libagilispiezo/agilispiezo.h
-    include/libagilispiezo/serial.h
+    include/agilispiezo.h
+    include/serial.h
 )
 
 # Find dependencies

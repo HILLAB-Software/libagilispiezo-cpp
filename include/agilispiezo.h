@@ -25,7 +25,7 @@
 #include <mutex>
 #include <future>
 #include <iostream>
-#include "libagilispiezo/serial.h"
+#include "serial.h"
 
 namespace agilispiezo {
 

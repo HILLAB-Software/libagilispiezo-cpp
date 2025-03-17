@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "libagilispiezo/agilispiezo.h"
+#include "agilispiezo.h"
 #include <iostream>
 #include <thread>
 #include <chrono>

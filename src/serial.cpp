@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "libagilispiezo/serial.h"
+#include "serial.h"
 #include <iostream>
 #include <string>
 #include <system_error>
