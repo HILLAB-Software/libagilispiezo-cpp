@@ -19,8 +19,8 @@ set(SOURCES
 
 # Define header files
 set(HEADERS
-    include/agilispiezo.h
-    include/serial.h
+    include/${PROJECT_NAME}/agilispiezo.h
+    include/${PROJECT_NAME}/serial.h
 )
 
 # Find dependencies
@@ -58,8 +58,10 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 # Add include directories
 target_include_directories(${PROJECT_NAME}
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         $<INSTALL_INTERFACE:include>
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}
 )
 
 # Link with necessary libraries
