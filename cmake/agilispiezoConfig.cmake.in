@@ -1,4 +1,19 @@
 @PACKAGE_INIT@
 
+include(CMakeFindDependencyMacro)
+find_dependency(Threads REQUIRED)
+
+find_path(ASIO_INCLUDE_DIR asio.hpp
+  PATHS /usr/include /usr/local/include
+)
+if(NOT ASIO_INCLUDE_DIR)
+  message(FATAL_ERROR "Could not find Asio headers")
+endif()
+
 include("${CMAKE_CURRENT_LIST_DIR}/agilispiezoTargets.cmake")
+
+if(TARGET agilispiezo AND NOT TARGET agilispiezo::agilispiezo)
+  add_library(agilispiezo::agilispiezo ALIAS agilispiezo)
+endif()
+
 check_required_components(agilispiezo)
