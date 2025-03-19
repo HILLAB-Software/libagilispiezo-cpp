@@ -6,6 +6,11 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Set output directories for all targets
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/Release")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/Release")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/Release")
+
 # Define source files
 set(SOURCES
     src/agilispiezo.cpp
@@ -35,74 +40,93 @@ else()
   include_directories(${Asio_INCLUDE_DIRS})
 endif()
 
-# Add include directories
-include_directories(include)
-
 # Create the library
-add_library(agilispiezo STATIC ${SOURCES} ${HEADERS})
-target_include_directories(agilispiezo PUBLIC 
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+add_library(${PROJECT_NAME} SHARED ${SOURCES} ${HEADERS})
+
+# Enable automatic DLL export on Windows
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
+# Set output name for the library
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    DEBUG_POSTFIX "d"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Release"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Release"
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Release"
+)
+
+# Add include directories
+target_include_directories(${PROJECT_NAME}
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
 )
 
 # Link with necessary libraries
-target_link_libraries(agilispiezo PUBLIC Threads::Threads)
-target_compile_options(agilispiezo PRIVATE -Wall -Wextra -pedantic)
+target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
+target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic)
 
 # Add examples directory
 add_subdirectory(examples)
 
-# Installation rules
-install(TARGETS agilispiezo
-    EXPORT agilispiezoTargets
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-    RUNTIME DESTINATION bin
-    INCLUDES DESTINATION include
+# Installation settings
+include(GNUInstallDirs)
+set(INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+
+# Install library
+install(TARGETS ${PROJECT_NAME}
+    EXPORT ${PROJECT_NAME}Targets
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
-install(DIRECTORY include/libagilispiezo
-    DESTINATION include
-    FILES_MATCHING PATTERN "*.h"
+# Install header files
+install(FILES ${HEADERS}
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
 )
 
-install(EXPORT agilispiezoTargets
-    FILE agilispiezoTargets.cmake
-    NAMESPACE agilispiezo::
-    DESTINATION lib/cmake/agilispiezo
+# Install CMake targets
+install(EXPORT ${PROJECT_NAME}Targets
+    FILE ${PROJECT_NAME}Targets.cmake
+    NAMESPACE ${PROJECT_NAME}::
+    DESTINATION ${INSTALL_CONFIGDIR}
 )
 
-# Configure and install package configuration file
+# Generate and install Config files
 include(CMakePackageConfigHelpers)
 configure_package_config_file(
-    cmake/agilispiezoConfig.cmake.in
-    "${CMAKE_CURRENT_BINARY_DIR}/agilispiezoConfig.cmake"
-    INSTALL_DESTINATION lib/cmake/agilispiezo
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+    INSTALL_DESTINATION ${INSTALL_CONFIGDIR}
 )
 
+# Generate version file
 write_basic_package_version_file(
-    "${CMAKE_CURRENT_BINARY_DIR}/agilispiezoConfigVersion.cmake"
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
     VERSION ${PROJECT_VERSION}
     COMPATIBILITY SameMajorVersion
 )
 
+# Install config files
 install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/agilispiezoConfig.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/agilispiezoConfigVersion.cmake"
-    DESTINATION lib/cmake/agilispiezo
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+    DESTINATION ${INSTALL_CONFIGDIR}
 )
 
 # Directory structure setup
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src)
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/libagilispiezo)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include)
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/examples)
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # Create a configuration template if it doesn't exist
-if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cmake/agilispiezoConfig.cmake.in")
-    file(WRITE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/agilispiezoConfig.cmake.in"
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in")
+    file(WRITE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
         "@PACKAGE_INIT@\n\n"
-        "include(\"\${CMAKE_CURRENT_LIST_DIR}/agilispiezoTargets.cmake\")\n"
-        "check_required_components(agilispiezo)\n"
+        "include(\"\${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}Targets.cmake\")\n"
+        "check_required_components(${PROJECT_NAME})\n"
     )
 endif()
