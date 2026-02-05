@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
   }
   std::string port_name = argv[1];
   AgilisPiezo piezo;
-  piezo.SetLogLevel(AgilisPiezo::LOG_INFO);
+  piezo.SetLogLevel(AgilisPiezo::LOG_DEBUG);
   std::cout << "Connecting to device on " << port_name << "..." << std::endl;
   bool connected = piezo.ConnectDeviceUSB(port_name);
   

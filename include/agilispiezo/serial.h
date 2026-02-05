@@ -63,9 +63,15 @@ public:
 
 private:
   void Log(const std::string& message);
+  std::string BytesToHex(const std::string& data);
+  std::string EscapeString(const std::string& data);
+  void StartIOThread();
+  void StopIOThread();
 
   std::unique_ptr<asio::serial_port> port_ = nullptr;
   asio::io_service io_;
+  std::unique_ptr<asio::io_service::work> work_;
+  std::thread io_thread_;
   LogCallback log_callback_ = nullptr;
 };
 
