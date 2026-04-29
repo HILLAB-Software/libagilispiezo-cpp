@@ -57,83 +57,81 @@ sudo cmake --install .    # On Windows, remove 'sudo'
 
 ### Building the Examples
 
-Examples are included in the `examples` directory and are automatically built when you build the library:
+Examples are not built by default. Pass `-DAGILISPIEZO_BUILD_EXAMPLES=ON` to enable them:
 
 ```bash
-# After building the library
-cd build
+cmake -DAGILISPIEZO_BUILD_EXAMPLES=ON ..
+cmake --build .
+
+# Run
 ./examples/basic_example /dev/ttyUSB0  # Replace with your device port
 ```
 
 ### Using the Library in Your Project
 
-#### With CMake
-
-Create a `CMakeLists.txt` file in your project:
+#### With CMake (installed)
 
 ```cmake
 cmake_minimum_required(VERSION 3.10)
 project(myapp)
 
-# Find the AgilisPiezo package
 find_package(agilispiezo REQUIRED)
 
-# Add your executable
 add_executable(myapp main.cpp)
-
-# Link with the AgilisPiezo library
 target_link_libraries(myapp PRIVATE agilispiezo::agilispiezo)
+```
+
+#### With CMake (as a Git submodule)
+
+```bash
+git submodule add https://github.com/HILLAB-Software/libagilispiezo-cpp.git external/libagilispiezo
+git submodule update --init
+```
+
+```cmake
+add_subdirectory(external/libagilispiezo EXCLUDE_FROM_ALL)
+
+add_executable(myapp main.cpp)
+target_link_libraries(myapp PRIVATE agilispiezo)
+```
+
+On Windows, Asio is not found automatically. Set `ASIO_INCLUDE_DIR` or `ASIO_ROOT` to the Asio include path:
+
+```bash
+# via vcpkg toolchain (recommended)
+vcpkg install asio
+
+# or manually
+cmake -DASIO_INCLUDE_DIR=C:/path/to/asio/include ..
 ```
 
 #### Example Code
 
 ```cpp
-#include <libagilispiezo/agilispiezo.h>
+#include <agilispiezo/agilispiezo.h>
 #include <iostream>
 
 int main() {
   agilispiezo::AgilisPiezo piezo;
-  
-  // Set log level
+
   piezo.SetLogLevel(agilispiezo::AgilisPiezo::LOG_INFO);
-  
-  // Connect to the device
+
   if (!piezo.ConnectDeviceUSB("/dev/ttyUSB0")) {
     std::cerr << "Failed to connect to device" << std::endl;
     return 1;
   }
-  
-  // Set to remote mode
+
   piezo.SetToRemoteMode();
-  
-  // Get device information
+
   std::string firmware;
   piezo.GetControllerFirmwareVersion(&firmware);
   std::cout << "Firmware version: " << firmware << std::endl;
-  
-  // Move axis 1 by 10 steps in positive direction
+
   piezo.RelativeMove(1, true, 10);
-  
-  // Disconnect from the device
+
   piezo.DisconnectDevice();
-  
   return 0;
 }
-```
-
-### Building Your Application
-
-```bash
-# Create a build directory
-mkdir -p build
-cd build
-
-# Configure and build
-cmake ..
-cmake --build .
-
-# Run your application
-./myapp
 ```
 
 ## Troubleshooting
@@ -142,10 +140,21 @@ cmake --build .
 
 #### Cannot Find Package
 
-If CMake cannot find the agilispiezo package, you may need to specify the path:
+If CMake cannot find the agilispiezo package, specify the installation path:
 
 ```bash
 cmake -DCMAKE_PREFIX_PATH=/path/to/installation ..
+```
+
+#### Cannot Find Asio
+
+Set `ASIO_INCLUDE_DIR` to the directory containing `asio.hpp`, or set `ASIO_ROOT` as an environment variable:
+
+```bash
+cmake -DASIO_INCLUDE_DIR=/path/to/asio/include ..
+# or
+export ASIO_ROOT=/path/to/asio  # Linux/macOS
+set ASIO_ROOT=C:\path\to\asio   # Windows
 ```
 
 #### Device Not Found
