@@ -17,8 +17,8 @@ set(HEADERS
 
 find_package(Threads REQUIRED)
 
-find_package(Asio QUIET)
-if(NOT Asio_FOUND)
+find_package(asio CONFIG QUIET)
+if(NOT asio_FOUND)
   find_path(ASIO_INCLUDE_DIR asio.hpp
     PATHS
       /usr/include
@@ -26,7 +26,7 @@ if(NOT Asio_FOUND)
       $ENV{ASIO_ROOT}/include
   )
   if(NOT ASIO_INCLUDE_DIR)
-    message(FATAL_ERROR "Could not find Asio headers. Set ASIO_INCLUDE_DIR or install libasio-dev.")
+    message(FATAL_ERROR "Could not find Asio headers. Install via vcpkg (vcpkg install asio) or set ASIO_ROOT.")
   endif()
 endif()
 
@@ -44,8 +44,8 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}
 )
 
-if(Asio_FOUND)
-  target_include_directories(${PROJECT_NAME} PRIVATE ${Asio_INCLUDE_DIRS})
+if(asio_FOUND)
+  target_link_libraries(${PROJECT_NAME} PRIVATE asio::asio)
 else()
   target_include_directories(${PROJECT_NAME} PRIVATE ${ASIO_INCLUDE_DIR})
 endif()
