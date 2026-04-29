@@ -45,9 +45,9 @@ target_include_directories(${PROJECT_NAME}
 )
 
 if(asio_FOUND)
-  target_link_libraries(${PROJECT_NAME} PRIVATE asio::asio)
+  target_link_libraries(${PROJECT_NAME} PUBLIC asio::asio)
 else()
-  target_include_directories(${PROJECT_NAME} PRIVATE ${ASIO_INCLUDE_DIR})
+  target_include_directories(${PROJECT_NAME} PUBLIC ${ASIO_INCLUDE_DIR})
 endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
