@@ -317,6 +317,14 @@ public:
    */
   void SetLogLevel(LogLevel level);
 
+  /**
+   * @brief Set a custom log callback
+   * When set, log messages are passed to the callback instead of std::cout.
+   * @param callback Function called with (level, formatted_message). Pass nullptr to reset.
+   */
+  using LogCallback = std::function<void(LogLevel, const std::string&)>;
+  void SetLogCallback(LogCallback callback);
+
 private:
   /// Send command. If error_code is specified, read return values from serial.
   bool __SendCommand(const std::string& command, int* error_code = nullptr) const;
@@ -333,6 +341,7 @@ private:
   Timer cmd_term_timer_;
   mutable std::mutex m_;
   LogLevel log_level_ = LOG_WARNING;
+  LogCallback log_callback_ = nullptr;
 
   std::string axis_table_[3] = { "0", "1", "2" };
   std::string channel_table_[5] = { "0", "1", "2", "3", "4" };

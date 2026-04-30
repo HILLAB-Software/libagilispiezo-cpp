@@ -501,6 +501,10 @@ inline bool AgilisPiezo::__GetIntegerFromReturnValue(
   }
 }
 
+void AgilisPiezo::SetLogCallback(LogCallback callback) {
+  log_callback_ = std::move(callback);
+}
+
 void AgilisPiezo::__Log(LogLevel level, const std::string& message) const {
   if (level >= log_level_) {
     std::string level_str;
@@ -511,10 +515,13 @@ void AgilisPiezo::__Log(LogLevel level, const std::string& message) const {
       case LOG_ERROR: level_str = "ERROR"; break;
       default: level_str = "UNKNOWN"; break;
     }
-    
+
     std::ostringstream ss;
     ss << "[" << level_str << "] " << message;
-    std::cout << ss.str() << std::endl;
+    if (log_callback_)
+      log_callback_(level, ss.str());
+    else
+      std::cout << ss.str() << std::endl;
   }
 }
 
