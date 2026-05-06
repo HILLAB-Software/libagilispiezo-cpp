@@ -45,7 +45,7 @@ Serial::~Serial() {
 
 void Serial::StartIOThread() {
   // Create work object to keep io_service running
-  work_ = std::make_unique<asio::io_service::work>(io_);
+  work_ = std::make_unique<asio::executor_work_guard<asio::io_context::executor_type>>(io_.get_executor());
   
   // Start io_service in background thread
   io_thread_ = std::thread([this]() {
@@ -245,7 +245,7 @@ bool Serial::ListenUntil(std::string* read,
   auto start_time = std::chrono::steady_clock::now();
   
   // Reset io_service for this operation
-  io_.reset();
+  io_.restart();
   
   asio::streambuf received;
   std::error_code read_ec;

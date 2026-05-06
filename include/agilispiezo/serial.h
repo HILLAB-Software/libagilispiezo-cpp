@@ -69,8 +69,8 @@ private:
   void StopIOThread();
 
   std::unique_ptr<asio::serial_port> port_ = nullptr;
-  asio::io_service io_;
-  std::unique_ptr<asio::io_service::work> work_;
+  asio::io_context io_;
+  std::unique_ptr<asio::executor_work_guard<asio::io_context::executor_type>> work_;
   std::thread io_thread_;
   LogCallback log_callback_ = nullptr;
 };
